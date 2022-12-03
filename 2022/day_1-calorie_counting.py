@@ -19,4 +19,4 @@ def get_top_3_elves():
 if __name__ == '__main__':
     elves_highest_calorie = get_top_3_elves()
     print(f'Question 1 part A: {elves_highest_calorie[0]}')
-    print(f'Question 1 part A: {sum(elves_highest_calorie)}')
+    print(f'Question 1 part B: {sum(elves_highest_calorie)}')
