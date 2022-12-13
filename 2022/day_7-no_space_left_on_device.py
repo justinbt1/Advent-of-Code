@@ -1,24 +1,29 @@
 
 class DirectoryNode:
-    def __init__(self, name):
+    def __init__(self, name, parent):
         self.name = name
         self.size = 0
-        self.sub_nodes = {}
-        self.parent = None
+        self.children = {}
+        self.parent = parent
 
 
 def tree_builder(cli_lines):
-    current_node = None
+    current_node = DirectoryNode(name='/', parent=None)
 
     for line in cli_lines:
+        print(current_node.name, current_node.size)
         line = line.strip().split()
         if line[0] == '$':
             if line[1] == 'cd':
-                current_node = DirectoryNode(line[2])
+                if line[2] == '..':
+                    current_node = current_node.parent
+                elif line[2] != '/':
+                    current_node = current_node.children[line[2]]
         elif line[0] == 'dir':
-            child_name = line[1]
-            print(child_name)
-            current_node.sub_nodes[child_name] = DirectoryNode(name=child_name)
+            current_node.children[line[1]] = DirectoryNode(
+                name=line[1],
+                parent=current_node
+            )
         else:
             current_node.size += int(line[0])
 
