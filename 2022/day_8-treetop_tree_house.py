@@ -8,6 +8,16 @@ def create_grid():
     return grid
 
 
+def create_results_grid(width, height):
+    results_grid = [[1 for _ in range(width)]]
+    for _ in range(height - 2):
+        results_grid.append([0 for _ in range(width)])
+
+    results_grid += [[1 for _ in range(width)]]
+
+    return results_grid
+
+
 def row_walker(row, i, results, first_row, start, end, step_direction):
     previous_tree = row[first_row]
     for j in range(start, end, step_direction):
@@ -47,9 +57,5 @@ def brute_force_visibility_scan(grid, results):
 
 if __name__ == '__main__':
     tree_grid = create_grid()
-    results_grid = [[1 for i in range(len(tree_grid[1]))]]
-    results_grid += [
-        [0 for i in range(len(tree_grid[0]))] for i in range(len(tree_grid) - 2)
-    ]
-    results_grid += [[1 for i in range(len(tree_grid[1]))]]
+    results_grid = create_results_grid(len(tree_grid[0]), len(tree_grid))
     brute_force_visibility_scan(tree_grid, results_grid)
