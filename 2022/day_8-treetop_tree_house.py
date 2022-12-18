@@ -7,52 +7,48 @@ def create_grid():
     return grid
 
 
-def walk_rows(row, i, results):
-    previous_tree = row[0]
-    for j in range(1, len(row), 1):
-        if row[j] > previous_tree:
-            results[i][j] = 1
-            previous_tree = row[j]
+def calculate_view(current_tree, tree_line):
+    viewing_distance = 0
+    for tree in tree_line:
+        viewing_distance += 1
+        if tree >= current_tree:
+            break
 
-    previous_tree = row[-1]
-    for j in range(len(row) - 1, 0, -1):
-        if row[j] > previous_tree:
-            results[i][j] = 1
-            previous_tree = row[j]
+    return viewing_distance
 
 
-def brute_force_visibility_scan(grid, results):
-    for i in range(1, len(grid) - 1):
-        results[i][0] = 1
-        results[i][-1] = 1
-        walk_rows(grid[i], i, results)
+def check_visibility(current_tree, tree_line):
+    if not tree_line:
+        return True
 
-    for j in range(1, len(grid[0]) - 1):
-        previous_tree = grid[0][j]
-        for i in range(1, len(grid) - 1):
-            if grid[i][j] > previous_tree:
-                results[i][j] = 1
-                previous_tree = grid[i][j]
-
-    for j in range(1, len(grid[0]) - 1):
-        previous_tree = grid[-1][j]
-        for i in range(len(grid) - 1, 1, -1):
-            if grid[i][j] > previous_tree:
-                results[i][j] = 1
-                previous_tree = grid[i][j]
-
-    total = 0
-    for r in results:
-        total += sum(r)
-
-    print(total)
+    if max(tree_line) < current_tree:
+        return True
 
 
 if __name__ == '__main__':
     tree_grid = create_grid()
-    results_grid = [[1 for i in range(len(tree_grid[1]))]]
-    results_grid += [
-        [0 for i in range(len(tree_grid[0]))] for i in range(len(tree_grid) - 2)
-    ]
-    results_grid += [[1 for i in range(len(tree_grid[1]))]]
-    brute_force_visibility_scan(tree_grid, results_grid)
+
+    max_scenic_score = 0
+    visible_tree_count = 0
+    for i in range(len(tree_grid)):
+        for j in range(len(tree_grid[0])):
+            current_tree = tree_grid[i][j]
+            east = [tree for tree in tree_grid[i][j + 1:]]
+            west = [tree_grid[i][t - 1] for t in range(j, 0, -1)]
+            north = [tree_grid[t - 1][j] for t in range(i, 0, -1) if t > 0]
+            south = [tree_grid[t][j] for t in range(i + 1, len(tree_grid))]
+
+            for direction in [east, west, north, south]:
+                if check_visibility(current_tree, direction):
+                    visible_tree_count += 1
+                    break
+
+            scenic_score = 1
+            for direction in [east, west, north, south]:
+                scenic_score *= calculate_view(current_tree, direction)
+
+            if scenic_score > max_scenic_score:
+                max_scenic_score = scenic_score
+
+    print(f'Part 1: {visible_tree_count}')
+    print(f'Part 2: {max_scenic_score}')
