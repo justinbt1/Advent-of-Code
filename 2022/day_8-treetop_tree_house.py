@@ -25,9 +25,8 @@ def check_visibility(current_tree, tree_line):
         return True
 
 
-if __name__ == '__main__':
+def scan_trees():
     tree_grid = create_grid()
-
     max_scenic_score = 0
     visible_tree_count = 0
     for i in range(len(tree_grid)):
@@ -52,3 +51,7 @@ if __name__ == '__main__':
 
     print(f'Part 1: {visible_tree_count}')
     print(f'Part 2: {max_scenic_score}')
+
+
+if __name__ == '__main__':
+    scan_trees()
