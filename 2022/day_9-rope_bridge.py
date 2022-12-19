@@ -8,28 +8,33 @@ def read_motions():
     return motions
 
 
-def shift_knots(rope):
+def shift_knots(current, previous, axis):
+    current[axis] += int((previous[axis] - current[axis]) / 2)
+    if previous[1 - axis] > current[1 - axis]:
+        current[1 - axis] += 1
+    elif previous[1 - axis] < current[1 - axis]:
+        current[1 - axis] -= 1
+
+
+def simulate_rope(rope):
     for i in range(len(rope) - 1):
         previous = rope[i]
         current = rope[i + 1]
 
-        if (previous[0] - current[0]) > 1:
-            current[0] += 1
-            current[1] = previous[1]
-
-        elif (current[0] - previous[0]) > 1:
-            current[0] -= 1
-            current[1] = previous[1]
-
-        elif (previous[1] - current[1]) > 1:
-            current[1] += 1
-            current[0] = previous[0]
-
-        elif (current[1] - previous[1]) > 1:
-            current[1] -= 1
-            current[0] = previous[0]
+        if abs(previous[0] - current[0]) == 2:
+            shift_knots(current, previous, 0)
+        elif abs(previous[1] - current[1]) == 2:
+            shift_knots(current, previous, 1)
 
     return rope
+
+
+def go_through_the_motions(rope, axis, direction, distance, tracker):
+    step = 1 * direction
+    for _ in range(distance):
+        rope[0][axis] += step
+        rope = simulate_rope(rope)
+        tracker.append(tuple(rope[-1]))
 
 
 def test(n):
@@ -39,28 +44,13 @@ def test(n):
 
     for motion in motions:
         if motion[0] == 'R':
-            for _ in range(motion[1]):
-                rope[0][0] += 1
-                rope = shift_knots(rope)
-                tracker.append(tuple(rope[-1]))
-
+            go_through_the_motions(rope, 0, 1, motion[1], tracker)
         elif motion[0] == 'L':
-            for _ in range(motion[1]):
-                rope[0][0] -= 1
-                rope = shift_knots(rope)
-                tracker.append(tuple(rope[-1]))
-
+            go_through_the_motions(rope, 0, -1, motion[1], tracker)
         elif motion[0] == 'U':
-            for _ in range(motion[1]):
-                rope[0][1] += 1
-                rope = shift_knots(rope)
-                tracker.append(tuple(rope[-1]))
-
+            go_through_the_motions(rope, 1, 1, motion[1], tracker)
         elif motion[0] == 'D':
-            for _ in range(motion[1]):
-                rope[0][1] -= 1
-                rope = shift_knots(rope)
-                tracker.append(tuple(rope[-1]))
+            go_through_the_motions(rope, 1, -1, motion[1], tracker)
 
     return len(set(tracker))
 
