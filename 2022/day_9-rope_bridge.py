@@ -37,7 +37,7 @@ def go_through_the_motions(rope, axis, direction, distance, tracker):
         tracker.append(tuple(rope[-1]))
 
 
-def test(n):
+def model_rope_bridge(n):
     tracker = [(0, 0)]
     rope = [[0, 0] for i in range(n)]
     motions = read_motions()
@@ -56,7 +56,7 @@ def test(n):
 
 
 if __name__ == '__main__':
-    tail_visits = test(2)
+    tail_visits = model_rope_bridge(2)
     print(f'Part 1: {tail_visits}')
-    tail_visits = test(10)
+    tail_visits = model_rope_bridge(10)
     print(f'Part 2: {tail_visits}')
