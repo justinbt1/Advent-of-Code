@@ -1,7 +1,7 @@
 
 def get_instructions():
     with open('data/10.txt', 'rt') as input_file:
-        instructions = [line.strip() for line in input_file]
+        instructions = [line.strip().split() for line in input_file]
 
     return instructions
 
@@ -12,10 +12,8 @@ class AddX:
         self.value = int(instruction[1])
 
 
-if __name__ == '__main__':
-    with open('data/10.txt', 'rt') as input_file:
-        instructions = [line.strip().split() for line in input_file]
-
+def run_instructions():
+    instructions = get_instructions()
     register = 1
     clock_cycle = 1
     next_cycle = 20
@@ -46,3 +44,7 @@ if __name__ == '__main__':
             print(clock_cycle, register)
 
     print(signal_strengths)
+
+
+if __name__ == '__main__':
+    run_instructions()
