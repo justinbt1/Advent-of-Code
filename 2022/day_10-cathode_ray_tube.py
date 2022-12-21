@@ -6,10 +6,12 @@ def get_instructions():
     return instructions
 
 
-class AddX:
-    def __init__(self, instruction):
-        self.remaining_cycles = 1
-        self.value = int(instruction[1])
+def print_pixel(clock_cycle, register):
+    pixel = '#'
+    if (clock_cycle - 1) % 40 == 0:
+        pixel += '\n'
+
+    return pixel
 
 
 def run_instructions():
@@ -20,30 +22,29 @@ def run_instructions():
     current_operation = None
     next_instruction = 0
     signal_strengths = 0
+    output = ''
 
     while True:
         clock_cycle += 1
         if current_operation:
-            if current_operation.remaining_cycles > 1:
-                current_operation.remaining_cycles -= 1
-            else:
-                register += current_operation.value
-                current_operation = None
+            register += current_operation
+            current_operation = None
         else:
             if next_instruction == len(instructions):
                 break
 
             current_instruction = instructions[next_instruction]
             if current_instruction[0] == 'addx':
-                current_operation = AddX(current_instruction)
+                current_operation = int(current_instruction[1])
             next_instruction += 1
 
         if clock_cycle == next_cycle:
             signal_strengths += clock_cycle * register
             next_cycle += 40
-            print(clock_cycle, register)
 
+        output += print_pixel(clock_cycle, register)
     print(signal_strengths)
+    print(output)
 
 
 if __name__ == '__main__':
