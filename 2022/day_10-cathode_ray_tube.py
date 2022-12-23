@@ -7,8 +7,12 @@ def get_instructions():
 
 
 def print_pixel(clock_cycle, register):
-    pixel = '#'
-    if (clock_cycle - 1) % 40 == 0:
+    pixel = '.'
+    pixel_pos = (clock_cycle) % 40
+    if pixel_pos - 1 in (register - 1, register, register + 1):
+        pixel = '#'
+
+    if pixel_pos == 0:
         pixel += '\n'
 
     return pixel
@@ -22,7 +26,7 @@ def run_instructions():
     current_operation = None
     next_instruction = 0
     signal_strengths = 0
-    output = ''
+    output = '#'
 
     while True:
         clock_cycle += 1
