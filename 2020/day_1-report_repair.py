@@ -5,7 +5,6 @@ def part_one(expenses):
                 return value * expense
 
 
-
 if __name__ == '__main__':
     with open('2020/data/1.txt', 'rt') as file:
         lines = [int(line.strip()) for line in file]
