@@ -3,6 +3,13 @@ def part_one(expenses):
         for expense in expenses:
             if value + expense == 2020:
                 return value * expense
+            
+def part_two(expenses):
+    for value1 in expenses:
+        for value2 in expenses:
+            for value3 in expenses:
+                if value3 + value2 + value1 == 2020:
+                    return value3 * value2 * value1
 
 
 if __name__ == '__main__':
@@ -10,3 +17,4 @@ if __name__ == '__main__':
         lines = [int(line.strip()) for line in file]
 
     print(part_one(lines))
+    print(part_two(lines))  
