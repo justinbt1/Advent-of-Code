@@ -1,8 +1,9 @@
-def part_one(digits):
+
+def captcha_solver(digits, step=1):
     total = 0
     n_digits = len(digits)
     for i in range(0, n_digits):
-        j = (i + 1) % n_digits
+        j = (i + step) % n_digits
         if digits[i] == digits[j]:
             total += digits[i]
 
@@ -14,4 +15,5 @@ if __name__ == '__main__':
         line = file.read().strip()
         digits = [int(digit.strip()) for digit in line]
 
-        part_one(digits)
+        captcha_solver(digits)
+        captcha_solver(digits, step=int(len(digits) / 2))
