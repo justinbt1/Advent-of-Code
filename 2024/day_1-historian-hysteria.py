@@ -22,7 +22,6 @@ def part_two(list_a, list_b):
     print(similarity_score)            
 
 
-
 if __name__ == '__main__':
     list_a = []
     list_b = []
