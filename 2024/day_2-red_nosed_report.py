@@ -11,7 +11,7 @@ def check_report(report):
 def safety_check(reports, dampner=False):
     safe_reports = 0
     for report in reports:
-        result = check_report(report, dampner)
+        result = check_report(report)
         if result == 0 and dampner:
             for j in range(0, len(report)):
                 if check_report(report[:j] + report[j + 1:]):
