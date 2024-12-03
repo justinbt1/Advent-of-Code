@@ -2,30 +2,26 @@ import re
 
 
 def remove_invalid_chunks(text):
-
-    a = text
     while True:
-        do_not = a.find('don\'t()')
+        do_not = text.find('don\'t()')
         if do_not == -1:
             break
 
-        do = a.find('do()')
-
+        do = text.find('do()')
         if do > do_not:
-            a = a[:do_not] + a[do:]
+            text = text[:do_not] + text[do:]
         else:
-            a = a[:do] + a[do + 4:]
+            text = text[:do] + text[do + 4:]
 
-    return a
+    return text
 
 
 def extract_valid_operations(text):
     operators = re.findall(r'mul\([0-9]{1,3},[0-9]{1,3}\)', text)
     values = [op[4:-1].split(',') for op in operators]
-    products = [int(x) * int(y) for x, y in values]
-    total = sum(products)
+    sum_products = sum([int(x) * int(y) for x, y in values])
 
-    return total
+    return sum_products
 
 
 if __name__ == '__main__':
@@ -35,6 +31,6 @@ if __name__ == '__main__':
     part_one = extract_valid_operations(text)
     print(part_one)
 
-    part_two = remove_invalid_chunks(text)
-    part_two = extract_valid_operations(part_two)
+    valid_text = remove_invalid_chunks(text)
+    part_two = extract_valid_operations(valid_text)
     print(part_two)
