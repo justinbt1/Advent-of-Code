@@ -15,7 +15,9 @@ def find_operators(value, all_values, test, i=1):
         valid_add = find_operators(add, all_values, test, i=i+1)
         mul = value * all_values[i]
         valid_mul = find_operators(mul, all_values, test, i=i+1)
-        if valid_add or valid_mul:
+        concat = int(str(value) + str(all_values[i]))
+        valid_concat = find_operators(concat, all_values, test, i=i+1)
+        if valid_add or valid_mul or valid_concat:
             return True
     else:
         if value == test:
