@@ -11,21 +11,32 @@ def find_antennas(matrix):
     return antennas
 
 
+def iter_nodes(m, n, m_delta, n_delta):
+    antinodes = set()
+    while True:
+        m = m + m_delta
+        n = n + n_delta
+        mn_antinode = (m, n)
+        if any(n < 0 for n in mn_antinode):
+            break
+        if mn_antinode[0] >= len(matrix) or mn_antinode[1] >= len(matrix[0]):
+            break
+        antinodes.add(mn_antinode)            
+
+    return antinodes
+
+
 def find_antinodes(antena_positions):
     antinodes = set()
     for frequency in antena_positions:
         positions = antena_positions[frequency]
+        for antena in positions:
+            antinodes.add(tuple(antena))
         for _ in range(len(positions) - 1):
             m, n = positions.pop()
             for y, x in positions:
-                mn_antinode = (m + (m - y), (n + (n - x)))
-                xy_antinode = (y + (y - m), (x + (x - n)))
-                
-                for antinode in [mn_antinode, xy_antinode]:
-                    if any(n < 0 for n in antinode):
-                        continue
-                    if antinode[0] < len(matrix) and antinode[1] < len(matrix[0]):
-                        antinodes.add(antinode)
+                antinodes.update(iter_nodes(m, n, m - y, n - x))
+                antinodes.update(iter_nodes(y, x, y - m, x - n))
 
     print(len(antinodes))
 
