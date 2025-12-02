@@ -15,9 +15,8 @@ def mirrored_ids(seq):
 
 
 def recurring_ids(seq):
-    for n in range(2, len(seq) + 1):
-        splits = [seq[i:i + len(seq) // n] for i in range(0, len(seq), len(seq) // n)]
-        if len(set(splits)) == 1:
+    for pattern in [seq[0:i] for i in range(len(seq) // 2, 0, -1)]:
+        if len(seq) / len(pattern) == seq.count(pattern):
             return True
 
 
