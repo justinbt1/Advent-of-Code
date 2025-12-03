@@ -9,26 +9,18 @@ def read_data():
 
 def find_highest(bank, n, i):
     if n - i == 1:
-        return str(max(bank)), []
+        return str(max(bank))
     max_i = bank[:-n + i + 1].index(max(bank[:-n + i + 1]))
-    return str(bank[max_i]), bank[max_i + 1:]
+    return str(bank[max_i]) + find_highest(bank[max_i + 1:], n, i + 1)
 
 
 def find_total_joltage(data, n):
-    output_joltages = []
+    total = 0
     for bank in data:
-        max_joltage = ''
-        i = 0
-        while True:
-            joltage, bank = find_highest(bank, n=n, i=i)
-            max_joltage += joltage
-            i += 1
-            if len(max_joltage) == n:
-                break
-        output_joltages.append(int(max_joltage))
+        total += int(find_highest(bank, n=n, i=0))
     
-    print(sum(output_joltages))
-    
+    print(total)
+
 
 if __name__ == '__main__':
     data = read_data()
