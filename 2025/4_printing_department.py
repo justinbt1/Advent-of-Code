@@ -8,27 +8,38 @@ def read_data():
         for row in pattern_buffer:
             matrix.append([int(i) for i in list(row.strip().replace('.', '0').replace('@', '1'))])
         return np.array(matrix)
-    
 
-def convolve(data):
-    windows = sliding_window_view(data, window_shape=(3, 3).reshape())
-    print(windows.shape)
 
+def convolve(matrix, removal=False):
+    windows = sliding_window_view(matrix, window_shape=(3, 3), writeable=removal)
     reachable = 0
     for row in windows:
         for kernel in row:
             if kernel[1][1]:
                 if np.sum(kernel) < 5:
                     reachable += 1
+                    if removal:
+                        kernel[1][1] = 0
 
     return reachable
-    
+
 
 def part_1(data):
     reachable = convolve(data)
     print(reachable)
 
 
+def part_2(data):
+    reachable = 0
+    while True:
+        reached = convolve(data, removal=True)
+        reachable += reached
+        if reached == 0:
+            break
+    print(reachable)
+
+
 if __name__ == '__main__':
     data = np.pad(read_data(), (1, 1))
     part_1(data)
+    part_2(data)
