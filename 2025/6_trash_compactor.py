@@ -29,9 +29,7 @@ def part_two(number_rows, operators):
     for row, op in zip(number_rows, operators):
         recombined = []
         for i in range(len(row[0]) - 1, 0 - 1, -1):
-            recombined_number = ''
-            for number in row:
-                recombined_number += number[i]
+            recombined_number = ''.join([n[i] for n in row])
             if recombined_number.strip():
                 recombined.append(int(recombined_number))
         grand_total += op(recombined)
